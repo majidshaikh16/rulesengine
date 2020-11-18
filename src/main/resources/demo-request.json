@@ -1,0 +1,10 @@
+{
+  "cibilScore": 900,
+  "firstName": "Mark",
+  "lastName": "K",
+  "age": "35",
+  "accountNumber": 123,
+  "bank": "ABC BANK",
+  "requestedLoanAmount": 50000,
+  "monthlySalary": 60000
+}

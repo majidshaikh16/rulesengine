@@ -1,0 +1,14 @@
+{
+  "accountNumber": 123,
+  "approvalStatus": true,
+  "interestRate": 10,
+  "sanctionedPercentage": 50,
+  "processingFees": 2100,
+  "message": "CIBIL IS BAD",
+  "eligibility": {
+    "id": 2,
+    "cibil": 800,
+    "monthlySalary": 60000,
+    "eligibleLoanAmount": 2000000
+  }
+}

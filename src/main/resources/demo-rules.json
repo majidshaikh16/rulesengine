@@ -1,0 +1,38 @@
+[
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "1",
+    "condition": "input.monthlySalary >= 50000 && input.cibilScore >= 800 && input.requestedLoanAmount < 4000000 && $(bank.target_done) == false",
+    "action": "output.setApprovalStatus(true);output.setSanctionedPercentage(90);output.setProcessingFees(8000);",
+    "priority": 1,
+    "description": "A person is eligible for Home loan?",
+    "transformer": null
+  },
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "2",
+    "condition": "input.monthlySalary >= 35000 && input.monthlySalary <= 50000 && input.cibilScore <= 500 && input.requestedLoanAmount < 2000000 && $(bank.target_done) == false",
+    "action": "output.setApprovalStatus(true);output.setSanctionedPercentage(60);output.setProcessingFees(2000);",
+    "priority": 2,
+    "description": "A person is eligible for Home loan?",
+    "transformer": null
+  },
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "3",
+    "condition": "(input.monthlySalary <= 4000 || input.cibilScore <= 100) && $(bank.target_done) == false",
+    "action": "(input.requestedLoanAmount > 0) ? output.setApprovalStatus(true);output.setSanctionedPercentage(50);output.setProcessingFees(2100);output.setAccountNumber(input.getAccountNumber());output.setInterestRate(10.0f);output.setMessage(\"Cibil is not so good still granting\".toUpperCase()) : output.setMessage(\"INVALID CASE\")",
+    "priority": 2,
+    "description": "A person is eligible for Home loan?",
+    "transformer": null
+  },
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "4",
+    "condition": "input.bank.equals(\"ABC BANK\") && input.age >= 30",
+    "action": "(input.requestedLoanAmount > 0) ? output.setApprovalStatus(true);output.setSanctionedPercentage(50);output.setProcessingFees(2100);output.setAccountNumber(input.getAccountNumber());output.setInterestRate(10.0f);output.setMessage(\"Cibil is BAD\".toUpperCase()) : output.setMessage(\"INVALID LOAN AMOUNT\")",
+    "priority": 4,
+    "description": "A person is eligible for Home loan?",
+    "transformer": "output.setEligibility(transform.findFirstByCibilLessThanEqualAndMonthlySalaryLessThanEqualOrderByEligibleLoanAmountDesc(input.cibilScore,input.monthlySalary))"
+  }
+]
