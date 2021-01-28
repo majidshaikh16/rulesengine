@@ -2,6 +2,7 @@ package com.rules.engine.langParser;
 
 import com.rules.engine.knowledgeBase.db.LoanEligibilityRepository;
 import com.rules.engine.knowledgeBase.models.Rule;
+import com.rules.engine.utils.RefdataCallUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,17 @@ public class RuleParser<INPUT_DATA, OUTPUT_RESULT> {
     @Autowired
     private LoanEligibilityRepository loanEligibilityRepository;
 
+    @Autowired
+    private RefdataCallUtils refdataCallUtils;
+
     private final String INPUT_KEYWORD = "input";
     private final String OUTPUT_KEYWORD = "output";
-    private final String TRANSFORM_KEYWORD = "transform";
+    private final String ENRICH_KEYWORD = "refdata";
+    private final String REFDATA_UTILS = "refdataLib";
 
     /**
      * Parsing in given priority/steps.
-     *
+     * <p>
      * Step 1. Resolve domain specific keywords first: $(rulenamespace.keyword)
      * Step 2. Resolve MVEL expression.
      *
@@ -44,7 +49,7 @@ public class RuleParser<INPUT_DATA, OUTPUT_RESULT> {
 
     /**
      * Parsing in given priority/steps.
-     *
+     * <p>
      * Step 1. Resolve domain specific keywords: $(rulenamespace.keyword)
      * Step 2. Resolve MVEL expression.
      *
@@ -58,19 +63,13 @@ public class RuleParser<INPUT_DATA, OUTPUT_RESULT> {
         Map<String, Object> input = new HashMap<>();
         input.put(INPUT_KEYWORD, inputData);
         input.put(OUTPUT_KEYWORD, outputResult);
+        input.put(ENRICH_KEYWORD, loanEligibilityRepository);
+        input.put(REFDATA_UTILS, refdataCallUtils);
         mvelParser.parseMvelExpression(resolvedDslExpression, input);
-
-        if (StringUtils.hasText(ruleMetadata.getTransformer())) {
-            input.put(TRANSFORM_KEYWORD, loanEligibilityRepository);
-            input.put(INPUT_KEYWORD, inputData);
-            input.put(OUTPUT_KEYWORD, outputResult);
-            transformWithMetadata(ruleMetadata.getTransformer(), input);
-        }
-
         return outputResult;
     }
 
-    private void transformWithMetadata(String expression, Map<String, Object> input){
+    private void transformWithMetadata(String expression, Map<String, Object> input) {
         mvelParser.parseMvelExpression(expression, input);
     }
 

@@ -21,6 +21,8 @@ import javax.websocket.server.PathParam;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -53,56 +55,19 @@ public class RuleEngineRestController {
     @PostMapping(value = "/loan")
     public ResponseEntity<?> postUserLoanDetails(@RequestBody UserDetails userDetails) {
         LoanDetails result = (LoanDetails) ruleEngine.run(loanInferenceEngine, userDetails);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(Objects.nonNull(result) ? result : "Request is not approved/discarded!!!");
     }
 
     @PostMapping(value = "/insurance")
     public ResponseEntity<?> postCarLoanDetails(@RequestBody PolicyHolderDetails policyHolderDetails) {
-        InsuranceDetails result = (InsuranceDetails) ruleEngine.run(insuranceInferenceEngine, policyHolderDetails);
+        Map result = (Map) ruleEngine.run(insuranceInferenceEngine, policyHolderDetails);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/get-eligibility/{cibil}/{monthlysalary}")
     public ResponseEntity<?> loanEligibility(@PathVariable Integer cibil, @PathVariable Double monthlysalary){
+        Optional<LoanEligibility> firstByCibil = this.loanEligibilityRepository.findFirstByCibil(cibil);
         Optional<LoanEligibility> loanEligibility = this.loanEligibilityRepository.findFirstByCibilLessThanEqualAndMonthlySalaryLessThanEqualOrderByEligibleLoanAmountDesc(cibil,monthlysalary);
         return ResponseEntity.ok(loanEligibility);
-    }
-
-    private void test(){
-
-
-        // no paramater
-        Class<?> noparams[] = {};
-
-        // String parameter
-        Class[] paramString = new Class[2];
-        paramString[0] = Long.class;
-        paramString[1] = Long.class;
-
-        try {
-            Class<? extends LoanEligibilityRepository> cls = loanEligibilityRepository.getClass();
-            Method[] declaredMethods = cls.getDeclaredMethods();
-            for (Method method: declaredMethods) {
-                boolean match = method.getName().equals("findFirstByCibilLessThanEqualAndMonthlySalaryLessThanEqualOrderByEligibleLoanAmountDesc");
-                Parameter[] parameters = method.getParameters();
-
-                int i =0;
-            }
-            // Load CrunchifyReflectionTest Class at runtime
-            /*Class<?> cls = Class.forName("com.rules.engine.knowledgeBase.db.LoanEligibilityRepository");
-            Object obj = cls.newInstance();
-
-            Method method = cls.getDeclaredMethod("getCompany", noparams);
-            method.invoke(obj);
-
-            method = cls.getDeclaredMethod("getCompanyName", paramString);
-            method.invoke(obj, new String("Google"));
-
-            method = cls.getDeclaredMethod("getCompanyPhone", paramString);
-            method.invoke(obj, new String("408.111.1111"));*/
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

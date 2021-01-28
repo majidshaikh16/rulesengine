@@ -21,8 +21,8 @@ public class RuleDbModel {
     private String ruleNamespace;
 
     @Id
-    @Column(name = "rule_id")
-    private String ruleId;
+    @Column(name = "rule")
+    private String rule;
 
     @Column(name = "`condition`", columnDefinition = "VARCHAR(2000)")
     private String condition;
@@ -36,12 +36,23 @@ public class RuleDbModel {
     @Column(name = "description", columnDefinition = "VARCHAR(2000)")
     private String description;
 
-    @Column(name = "include_transformer", columnDefinition = "VARCHAR(2000)")
-    private String includeTransformer;
+    @Transient
+    private String enrich;
+
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumns({
+            @JoinColumn(name = "enrich_namespace_ref", referencedColumnName = "rule_namespace"),
+            @JoinColumn(name = "enrich_rule_ref", referencedColumnName = "rule")
+    })
+    private RuleDbModel ruleReference;
+
+    public String getEnrich() {
+        return ruleReference == null ? enrich : ruleReference.getRule();
+    }
 
     @Data
     static class IdClass implements Serializable {
         private String ruleNamespace;
-        private String ruleId;
+        private String rule;
     }
 }

@@ -19,5 +19,4 @@ public class RulesEngineApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RulesEngineApplication.class, args);
 	}
-
 }

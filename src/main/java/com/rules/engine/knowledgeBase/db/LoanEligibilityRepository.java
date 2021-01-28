@@ -8,4 +8,5 @@ import java.util.Optional;
 @Repository
 public interface LoanEligibilityRepository extends CrudRepository<LoanEligibility, Long> {
     Optional<LoanEligibility> findFirstByCibilLessThanEqualAndMonthlySalaryLessThanEqualOrderByEligibleLoanAmountDesc(Integer cbil, Double monthlySalary);
+    Optional<LoanEligibility> findFirstByCibil(int cibil);
 }

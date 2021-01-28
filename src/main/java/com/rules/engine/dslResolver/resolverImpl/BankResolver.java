@@ -18,7 +18,8 @@ public class BankResolver implements DSLResolver {
     public Object resolveValue(String keyword) {
         if (keyword.equalsIgnoreCase(INTEREST)){
             //Code to calculate the current variable interest rates.
-            return 9.0;
+            float v = 9.0f;
+            return v;
         }
 
         if (keyword.equalsIgnoreCase(TARGET_DONE)){

@@ -1,5 +1,7 @@
 package com.rules.engine.knowledgeBase.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rules.engine.restAPI.RuleNamespace;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Rule {
     RuleNamespace ruleNamespace;
-    String ruleId;
+    String rule;
     String condition;
     String action;
     Integer priority;
     String description;
-    String transformer;
+    String refRuleId;
+    @JsonIgnore
+    Rule refRule;
 }

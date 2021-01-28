@@ -1,0 +1,36 @@
+[
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "rule-1",
+    "condition": "rule3",
+    "action": "output.setApprovalStatus(true);output.setSanctionedPercentage(90);",
+    "priority": 2,
+    "description": "A person is eligible for Home loan?",
+    "enrich": "rule-2"
+  },
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "rule-2",
+    "enrich": "refdataLib.invoke(\"output.setEligibility(refdata.findFirstByCibil(input.cibilScore))\",[\"input\" : input, \"output\": output]);\r\nisEligible = def (resp) { resp == null ? false : true };\r\noutput.setMetadata([\"isEligible\" : isEligible(output.eligibility)]);"
+  },
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "rule-3",
+    "condition": "input.bank.equals(\"XYZ BANK\") && input.age >= 30",
+    "action": "output.setProcessingFees(8000);output.setAccountNumber(input.accountNumber);output.setInterestRate($(bank.interest));output.setMessage(\"vip customer\");",
+    "priority": 2,
+    "description": "A person is eligible for Home loan?",
+    "enrich": "6"
+  },
+  {
+    "ruleNamespace": "LOAN",
+    "ruleId": "rule-4",
+    "condition": "input.bank.equals(\"XYZ BANK\") && input.age >= 30",
+    "action": "output.setApprovalStatus(true);output.setSanctionedPercentage(90);output.setProcessingFees(8000);output.setAccountNumber(input.accountNumber);output.setInterestRate($(bank.interest));output.setMessage(\"vip customer\");",
+    "priority": 2,
+    "description": "A person is eligible for Home loan?",
+    "enrich": "6"
+  }
+]
+
+//output.setApprovalStatus(true);output.setSanctionedPercentage(90);output.setProcessingFees(8000);output.setAccountNumber(input.accountNumber);output.setInterestRate($(bank.interest));output.setMessage("vip customer");

@@ -1,0 +1,27 @@
+static void test(){
+		List<String> listOfQuery = new ArrayList<>();
+		for (int i = 7; i < 5008; i++) {
+			String query= "INSERT INTO rules " +
+					" (rule_namespace , rule_id, `condition`," +
+					" `action`,enrich, priority, description)" +
+					"VALUES (" +
+					" 'LOAN'," +
+					" '"+i+"'," +
+					" 'input.bank.equals(\"XYZ BANK\") && input.age >= 30'," +
+					"'output.setApprovalStatus(true);output.setSanctionedPercentage(90);output.setProcessingFees(8000);output.setAccountNumber(input.accountNumber);output.setInterestRate($(bank.interest));output.setMessage(\"vip customer\");'," +
+					"'refdataLib.invoke(\"output.setEligibility(refdata.findFirstByCibil(input.cibilScore))\",[\"input\" : input, \"output\": output]);" +
+					"isEligible = def (resp) { resp == null ? false : true };" +
+					"output.setMetadata([\"isEligible\" : isEligible(output.eligibility)]);'," +
+					" '2'," +
+					" 'A person is eligible for Home loan?'" +
+					");";
+		listOfQuery.add(query);
+
+		}
+		try {
+			Files.write(Paths.get("/home/majid/Documents/Study/Rules-engine/rulesengine/src/main/resources/demorules.txt"), listOfQuery);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(listOfQuery);
+	}

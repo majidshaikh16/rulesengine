@@ -5,9 +5,12 @@ import com.rules.engine.ruleEngine.InferenceEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @Service
-public class InsuranceInferenceEngine extends InferenceEngine<PolicyHolderDetails, InsuranceDetails> {
+public class InsuranceInferenceEngine extends InferenceEngine<PolicyHolderDetails, Map<String,Object>> {
 
     @Override
     protected RuleNamespace getRuleNamespace() {
@@ -15,7 +18,7 @@ public class InsuranceInferenceEngine extends InferenceEngine<PolicyHolderDetail
     }
 
     @Override
-    protected InsuranceDetails initializeOutputResult() {
-        return InsuranceDetails.builder().build();
+    protected Map<String,Object> initializeOutputResult() {
+        return new HashMap<String, Object>();
     }
 }

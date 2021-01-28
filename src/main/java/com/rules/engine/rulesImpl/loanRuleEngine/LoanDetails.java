@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Data
@@ -19,5 +20,6 @@ public class LoanDetails {
     Float sanctionedPercentage;
     Double processingFees;
     String message = "no message".toUpperCase();
-    Optional<LoanEligibility> eligibility;
+    Object eligibility;
+    Map<String, Object> metadata;
 }
