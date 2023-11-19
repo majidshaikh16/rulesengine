@@ -3,6 +3,7 @@ package com.rules.engine.utils;
 import com.rules.engine.knowledgeBase.db.LoanEligibilityRepository;
 import com.rules.engine.langParser.MVELParser;
 import lombok.extern.log4j.Log4j2;
+import org.mvel2.MVELRuntime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,9 @@ public class RefdataCallUtils {
             return false;
         }
         return true;
+    }
+
+    private void test(){
     }
 
     
